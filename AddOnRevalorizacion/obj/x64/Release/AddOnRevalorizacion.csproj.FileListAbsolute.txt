@@ -1,0 +1,12 @@
+C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\bin\x64\Release\AddOnRevalorizacion.exe.config
+C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\bin\x64\Release\AddOnRevalorizacion.exe
+C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\bin\x64\Release\AddOnRevalorizacion.pdb
+C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\obj\x64\Release\AddOnRevalorizacion.csproj.AssemblyReference.cache
+C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\obj\x64\Release\Interop.SAPbobsCOM.dll
+C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\obj\x64\Release\Interop.SAPbouiCOM.dll
+C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\obj\x64\Release\AddOnRevalorizacion.csproj.ResolveComReference.cache
+C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\obj\x64\Release\AddOnRevalorizacion.Properties.Resources.resources
+C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\obj\x64\Release\AddOnRevalorizacion.csproj.GenerateResource.cache
+C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\obj\x64\Release\AddOnRevalorizacion.csproj.CoreCompileInputs.cache
+C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\obj\x64\Release\AddOnRevalorizacion.exe
+C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\obj\x64\Release\AddOnRevalorizacion.pdb
