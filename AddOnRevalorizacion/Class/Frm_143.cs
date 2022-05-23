@@ -282,7 +282,7 @@ namespace AddOnRevalorizacion.Class
 
                     oDocument.DocDate = receipt.DocDate;
                     oDocument.TaxDate = receipt.TaxDate;
-                    oDocument.DocCurrency = receipt.DocCur;
+                    //oDocument.DocCurrency = receipt.DocCur;
 
 
                     oDocument.Lines.Quantity = Math.Abs(receipt.Quantity - receipt.QuantityReal);
