@@ -174,9 +174,9 @@ namespace AddOnRevalorizacion.Class
 
                 string query = "SELECT IFNULL(B.\"U_SMF_RINV\",'0') AS \"Revalorizacion\", IFNULL(B.\"U_SMF_SINV\",'0') AS \"Salida\", IFNULL(B.\"U_SMF_EINV\",'0') AS \"Entrada\", B.\"LineNum\", B.\"ItemCode\", A.\"DocEntry\", A.\"DocCur\",A.\"DocRate\", CASE WHEN A.\"DocCur\"='USD' THEN B.\"TotalFrgn\" ELSE B.\"LineTotal\" END AS \"TotalLine\", ";
                 query = query + " A.\"DocDate\" AS \"DocDate\", A.\"TaxDate\" AS \"TaxDate\", ";
-                query = query + " B.\"Quantity\", IFNULL(B.\"U_SMF_CREAL\",0) AS \"QuantityReal\",'709311' AS \"AcctCode\", B.\"WhsCode\", ";
+                query = query + " B.\"Quantity\", IFNULL(B.\"U_SMF_CREAL\",0) AS \"QuantityReal\", (SELECT \"U_SMF_CCSA\" FROM \"@SMF_REVA\" WHERE \"Code\" = '001') AS \"AcctCodeS\", (SELECT \"U_SMF_CCEN\" FROM \"@SMF_REVA\" WHERE \"Code\" = '001') AS \"AcctCodeE\", B.\"WhsCode\", ";
                 query = query + " (SELECT MAX(\"BatchNum\") FROM OIBT WHERE \"BaseType\"='20' AND \"BaseEntry\"=A.\"DocEntry\" AND \"BaseLinNum\"= B.\"LineNum\" ) AS \"BatchNum\", ";
-                query = query + " B.\"OcrCode\", B.\"OcrCode2\", B.\"OcrCode3\", B.\"OcrCode4\", B.\"OcrCode5\" ";
+                query = query + " B.\"OcrCode\", B.\"OcrCode2\", B.\"OcrCode3\", B.\"OcrCode4\", B.\"OcrCode5\", IFNULL((SELECT MAX(\"DocRate\") FROM OPCH WHERE \"DocEntry\"=B.\"BaseEntry\"),1) AS \"tc_base\" ";
                 query = query + " FROM OPDN A INNER JOIN PDN1 B ON A.\"DocEntry\"=B.\"DocEntry\" WHERE A.\"DocNum\" = '" + oEditText.Value + "' ORDER BY 4 ";
 
                 oRS.DoQuery(query);
@@ -200,7 +200,8 @@ namespace AddOnRevalorizacion.Class
                         receipt.Quantity = oRS.Fields.Item("Quantity").Value;
                         receipt.QuantityReal = oRS.Fields.Item("QuantityReal").Value;
                         receipt.TotalLine = oRS.Fields.Item("TotalLine").Value;
-                        receipt.AccountCode = oRS.Fields.Item("AcctCode").Value;
+                        receipt.AccountCodeSalida = oRS.Fields.Item("AcctCodeS").Value;
+                        receipt.AccountCodeEntrada = oRS.Fields.Item("AcctCodeE").Value;
                         receipt.BatchNum = oRS.Fields.Item("BatchNum").Value;
                         receipt.WarehouseCode = oRS.Fields.Item("WhsCode").Value; 
                         receipt.CostingCode = oRS.Fields.Item("OcrCode").Value; 
@@ -211,6 +212,7 @@ namespace AddOnRevalorizacion.Class
                         receipt.Revalorizacion = oRS.Fields.Item("Revalorizacion").Value;
                         receipt.Salida = oRS.Fields.Item("Salida").Value;
                         receipt.Entrada = oRS.Fields.Item("Entrada").Value;
+                        receipt.TcBase = oRS.Fields.Item("tc_base").Value;
 
                         lista.Add("Linea (" + (receipt.LineNum + 1) + ") :");
 
@@ -269,14 +271,17 @@ namespace AddOnRevalorizacion.Class
 
                 if (receipt.Quantity != receipt.QuantityReal)
                 {
+                    string account_final = "";
                     if (receipt.Quantity > receipt.QuantityReal)
                     {
                         oDocument = Conexion.Conexion_SBO.m_oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenExit);
+                        account_final = receipt.AccountCodeSalida;
                         esSalida = true;
                     }
                     else if (receipt.Quantity < receipt.QuantityReal )
                     {
                         oDocument = Conexion.Conexion_SBO.m_oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenEntry);
+                        account_final = receipt.AccountCodeEntrada;
                         esSalida = false;
                     }
 
@@ -286,7 +291,7 @@ namespace AddOnRevalorizacion.Class
 
 
                     oDocument.Lines.Quantity = Math.Abs(receipt.Quantity - receipt.QuantityReal);
-                    oDocument.Lines.AccountCode = receipt.AccountCode;
+                    oDocument.Lines.AccountCode = account_final;
                     oDocument.Lines.ItemCode = receipt.Itemcode;
 
                     var BatchNum = receipt.BatchNum;
@@ -407,7 +412,7 @@ namespace AddOnRevalorizacion.Class
                         oMaterialRevaluationSNBLines = oMaterialRevaluation.Lines.SNBLines;
                         oMaterialRevaluationSNBLines.SetCurrentLine(cont);
                         oMaterialRevaluationSNBLines.SnbAbsEntry = oRS.Fields.Item("AbsEntry").Value;  //AbsEntry from OBTN Table
-                        oMaterialRevaluationSNBLines.NewCost = re.TotalLine/re.QuantityReal;
+                        oMaterialRevaluationSNBLines.NewCost = (re.TotalLine/re.QuantityReal)*re.TcBase;
                         oMaterialRevaluationSNBLines.Add();
                         cont++;
 

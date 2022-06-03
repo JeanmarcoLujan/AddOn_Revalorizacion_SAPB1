@@ -17,7 +17,8 @@ namespace AddOnRevalorizacion.Models
         public double Quantity { get; set; }
         public double QuantityReal { get; set; }
         public double TotalLine { get; set; }
-        public string AccountCode { get; set; }
+        public string AccountCodeSalida { get; set; }
+        public string AccountCodeEntrada { get; set; }
         public string BatchNum { get; set; }
         public string WarehouseCode { get; set; }
         public string CostingCode { get; set; }
@@ -28,5 +29,6 @@ namespace AddOnRevalorizacion.Models
         public int Revalorizacion { get; set; }
         public int Salida { get; set; }
         public int Entrada { get; set; }
+        public double TcBase { get; set; }
     }
 }
