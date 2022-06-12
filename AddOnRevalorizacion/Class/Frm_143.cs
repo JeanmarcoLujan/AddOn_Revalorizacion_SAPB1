@@ -216,6 +216,7 @@ namespace AddOnRevalorizacion.Class
 
                         lista.Add("Linea (" + (receipt.LineNum + 1) + ") :");
 
+
                         if (receipt.Salida == 0 && receipt.Entrada == 0 && receipt.Revalorizacion == 0)
                         {
                             
@@ -225,15 +226,21 @@ namespace AddOnRevalorizacion.Class
                             {
                                 var revalorizacionInventario = GenerarInventoryRevaluation(receipt);
                                 lista.Add(" - " + revalorizacionInventario.Item2.ToString());
-                                
-                            }
 
+                            }
+                            
 
 
                         }
+                        else if ( (receipt.Salida == 0 || receipt.Entrada == 0) && receipt.Revalorizacion == 0)
+                        {
+                            var revalorizacionInventario = GenerarInventoryRevaluation(receipt);
+                            lista.Add(" - La salida/entrada de inv, ya fue realizado en otro momento; solo faltó la revalorizacion");
+                            lista.Add(" - " + revalorizacionInventario.Item2.ToString());
+                        }
                         else
                         {
-                            lista.Add(" - Ya se realizó la revalorización de inventario");
+                            lista.Add(" - Ya se realizó la revalorización de inventario anteriormente");
                            // Conexion.Conexion_SBO.m_SBO_Appl.StatusBar.SetText("Ya se realizó la revalorización para la linea (" + (receipt.LineNum+1) + ") ", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Success);
                         }
 
