@@ -1,0 +1,11 @@
+C:\Users\soporte\source\repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\bin\x86\Debug\AddOnRevalorizacion.exe.config
+C:\Users\soporte\source\repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\bin\x86\Debug\AddOnRevalorizacion.exe
+C:\Users\soporte\source\repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\bin\x86\Debug\AddOnRevalorizacion.pdb
+C:\Users\soporte\source\repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x86\Debug\Interop.SAPbobsCOM.dll
+C:\Users\soporte\source\repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x86\Debug\Interop.SAPbouiCOM.dll
+C:\Users\soporte\source\repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x86\Debug\AddOnRevalorizacion.csproj.ResolveComReference.cache
+C:\Users\soporte\source\repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x86\Debug\AddOnRevalorizacion.Properties.Resources.resources
+C:\Users\soporte\source\repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x86\Debug\AddOnRevalorizacion.csproj.GenerateResource.cache
+C:\Users\soporte\source\repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x86\Debug\AddOnRevalorizacion.csproj.CoreCompileInputs.cache
+C:\Users\soporte\source\repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x86\Debug\AddOnRevalorizacion.exe
+C:\Users\soporte\source\repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x86\Debug\AddOnRevalorizacion.pdb

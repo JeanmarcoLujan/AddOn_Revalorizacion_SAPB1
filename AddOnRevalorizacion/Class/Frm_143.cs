@@ -176,6 +176,8 @@ namespace AddOnRevalorizacion.Class
                 query = query + " A.\"DocDate\" AS \"DocDate\", A.\"TaxDate\" AS \"TaxDate\", ";
                 query = query + " B.\"Quantity\", IFNULL(B.\"U_SMF_CREAL\",0) AS \"QuantityReal\", (SELECT \"U_SMF_CCSA\" FROM \"@SMF_REVA\" WHERE \"Code\" = '001') AS \"AcctCodeS\", (SELECT \"U_SMF_CCEN\" FROM \"@SMF_REVA\" WHERE \"Code\" = '001') AS \"AcctCodeE\", B.\"WhsCode\", ";
                 query = query + " (SELECT MAX(\"BatchNum\") FROM OIBT WHERE \"BaseType\"='20' AND \"BaseEntry\"=A.\"DocEntry\" AND \"BaseLinNum\"= B.\"LineNum\" ) AS \"BatchNum\", ";
+                query = query + " ( select MAX(T2.\"AbsEntry\") from OITW T0 inner join OITM T1 on T0.\"ItemCode\" = T1.\"ItemCode\" inner join OIBQ T3 on T0.\"ItemCode\" = T3.\"ItemCode\" and T0.\"WhsCode\" = T3.\"WhsCode\" ";
+                query = query + " inner join OBIN T2 on T2.\"AbsEntry\" = T3.\"BinAbs\" WHERE T0.\"ItemCode\" = B.\"ItemCode\" AND T0.\"WhsCode\" = B.\"WhsCode\" ) AS \"Location\", ";
                 query = query + " B.\"OcrCode\", B.\"OcrCode2\", B.\"OcrCode3\", B.\"OcrCode4\", B.\"OcrCode5\", IFNULL((SELECT MAX(\"DocRate\") FROM OPCH WHERE \"DocEntry\"=B.\"BaseEntry\"),1) AS \"tc_base\" ";
                 query = query + " FROM OPDN A INNER JOIN PDN1 B ON A.\"DocEntry\"=B.\"DocEntry\" WHERE A.\"DocNum\" = '" + oEditText.Value + "' ORDER BY 4 ";
 
@@ -203,6 +205,7 @@ namespace AddOnRevalorizacion.Class
                         receipt.AccountCodeSalida = oRS.Fields.Item("AcctCodeS").Value;
                         receipt.AccountCodeEntrada = oRS.Fields.Item("AcctCodeE").Value;
                         receipt.BatchNum = oRS.Fields.Item("BatchNum").Value;
+                        receipt.Location = oRS.Fields.Item("Location").Value == null ? 0: oRS.Fields.Item("Location").Value;
                         receipt.WarehouseCode = oRS.Fields.Item("WhsCode").Value; 
                         receipt.CostingCode = oRS.Fields.Item("OcrCode").Value; 
                         receipt.CostingCode2 = oRS.Fields.Item("OcrCode2").Value;
@@ -302,14 +305,28 @@ namespace AddOnRevalorizacion.Class
                     oDocument.Lines.ItemCode = receipt.Itemcode;
 
                     var BatchNum = receipt.BatchNum;
+                    var WhsCode = receipt.WarehouseCode;
+                    var sadsdfasd = receipt.Location.ToString();
+
                     if (!String.IsNullOrEmpty(BatchNum))
                     {
                         oDocument.Lines.BatchNumbers.BatchNumber = BatchNum;
-                        oDocument.Lines.BatchNumbers.Quantity = Math.Abs(receipt.Quantity - receipt.QuantityReal);
+                        oDocument.Lines.BatchNumbers.Quantity = Math.Abs(receipt.Quantity - receipt.QuantityReal);                       
                         oDocument.Lines.BatchNumbers.Add();
+
+                        if (receipt.Location == 0)
+                        {
+                            oDocument.Lines.BinAllocations.BaseLineNumber = 0;
+                            oDocument.Lines.BinAllocations.BinAbsEntry = receipt.Location;
+                            oDocument.Lines.BinAllocations.Quantity = Math.Abs(receipt.Quantity - receipt.QuantityReal); 
+                            oDocument.Lines.BinAllocations.SerialAndBatchNumbersBaseLine = 0;
+                        }
+                            
                     }
 
-                    var WhsCode = receipt.WarehouseCode;
+                   
+
+
                     if (!String.IsNullOrEmpty(WhsCode))
                         oDocument.Lines.WarehouseCode = WhsCode;
 
@@ -410,7 +427,7 @@ namespace AddOnRevalorizacion.Class
 
                     oMaterialRevaluation.Lines.RevaluationDecrementAccount = oRS.Fields.Item("DisminuirCuenta").Value;
                     oMaterialRevaluation.Lines.RevaluationIncrementAccount = oRS.Fields.Item("AumentarCuenta").Value;
-                    
+                   
 
                     oRS.MoveFirst();
                     int cont = 0;

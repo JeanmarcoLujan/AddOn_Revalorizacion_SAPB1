@@ -20,6 +20,7 @@ namespace AddOnRevalorizacion.Models
         public string AccountCodeSalida { get; set; }
         public string AccountCodeEntrada { get; set; }
         public string BatchNum { get; set; }
+        public int Location { get; set; }
         public string WarehouseCode { get; set; }
         public string CostingCode { get; set; }
         public string CostingCode2 { get; set; }
