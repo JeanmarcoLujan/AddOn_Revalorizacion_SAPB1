@@ -314,7 +314,7 @@ namespace AddOnRevalorizacion.Class
                         oDocument.Lines.BatchNumbers.Quantity = Math.Abs(receipt.Quantity - receipt.QuantityReal);                       
                         oDocument.Lines.BatchNumbers.Add();
 
-                        if (receipt.Location == 0)
+                        if (receipt.Location != 0)
                         {
                             oDocument.Lines.BinAllocations.BaseLineNumber = 0;
                             oDocument.Lines.BinAllocations.BinAbsEntry = receipt.Location;
