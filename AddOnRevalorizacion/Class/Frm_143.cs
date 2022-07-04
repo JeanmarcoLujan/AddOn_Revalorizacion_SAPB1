@@ -178,8 +178,8 @@ namespace AddOnRevalorizacion.Class
                 query = query + " (SELECT MAX(\"BatchNum\") FROM OIBT WHERE \"BaseType\"='20' AND \"BaseEntry\"=A.\"DocEntry\" AND \"BaseLinNum\"= B.\"LineNum\" ) AS \"BatchNum\", ";
                 query = query + " ( select MAX(T2.\"AbsEntry\") from OITW T0 inner join OITM T1 on T0.\"ItemCode\" = T1.\"ItemCode\" inner join OIBQ T3 on T0.\"ItemCode\" = T3.\"ItemCode\" and T0.\"WhsCode\" = T3.\"WhsCode\" ";
                 query = query + " inner join OBIN T2 on T2.\"AbsEntry\" = T3.\"BinAbs\" WHERE T0.\"ItemCode\" = B.\"ItemCode\" AND T0.\"WhsCode\" = B.\"WhsCode\" ) AS \"Location\", ";
-                query = query + " B.\"OcrCode\", B.\"OcrCode2\", B.\"OcrCode3\", B.\"OcrCode4\", B.\"OcrCode5\", IFNULL((SELECT MAX(\"DocRate\") FROM OPCH WHERE \"DocEntry\"=B.\"BaseEntry\"),1) AS \"tc_base\" ";
-                query = query + " FROM OPDN A INNER JOIN PDN1 B ON A.\"DocEntry\"=B.\"DocEntry\" WHERE A.\"DocNum\" = '" + oEditText.Value + "' ORDER BY 4 ";
+                query = query + " B.\"OcrCode\", B.\"OcrCode2\", B.\"OcrCode3\", B.\"OcrCode4\", B.\"OcrCode5\", IFNULL((SELECT MAX(\"DocRate\") FROM OPCH WHERE \"DocEntry\"=B.\"BaseEntry\"),1) AS \"tc_base\", B.\"Price\" AS \"PriceLine\" ";
+                query = query + " FROM OPDN A INNER JOIN PDN1 B ON A.\"DocEntry\"=B.\"DocEntry\"  WHERE A.\"DocNum\" = '" + oEditText.Value + "' AND A.\"CANCELED\"='N' ORDER BY 4 ";
 
                 oRS.DoQuery(query);
 
@@ -202,6 +202,7 @@ namespace AddOnRevalorizacion.Class
                         receipt.Quantity = oRS.Fields.Item("Quantity").Value;
                         receipt.QuantityReal = oRS.Fields.Item("QuantityReal").Value;
                         receipt.TotalLine = oRS.Fields.Item("TotalLine").Value;
+                        receipt.PriceLine = oRS.Fields.Item("PriceLine").Value;
                         receipt.AccountCodeSalida = oRS.Fields.Item("AcctCodeS").Value;
                         receipt.AccountCodeEntrada = oRS.Fields.Item("AcctCodeE").Value;
                         receipt.BatchNum = oRS.Fields.Item("BatchNum").Value;
@@ -282,6 +283,7 @@ namespace AddOnRevalorizacion.Class
                 if (receipt.Quantity != receipt.QuantityReal)
                 {
                     string account_final = "";
+                    var sdsd = Math.Abs(receipt.Quantity - receipt.QuantityReal); 
                     if (receipt.Quantity > receipt.QuantityReal)
                     {
                         oDocument = Conexion.Conexion_SBO.m_oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oInventoryGenExit);
@@ -297,34 +299,36 @@ namespace AddOnRevalorizacion.Class
 
                     oDocument.DocDate = receipt.DocDate;
                     oDocument.TaxDate = receipt.TaxDate;
-                    //oDocument.DocCurrency = receipt.DocCur;
-
 
                     oDocument.Lines.Quantity = Math.Abs(receipt.Quantity - receipt.QuantityReal);
                     oDocument.Lines.AccountCode = account_final;
                     oDocument.Lines.ItemCode = receipt.Itemcode;
+                    oDocument.Lines.Currency = receipt.DocCur;
+
+
+                    oDocument.Lines.UnitPrice = (receipt.Quantity * receipt.PriceLine) / receipt.QuantityReal;
+
+
 
                     var BatchNum = receipt.BatchNum;
                     var WhsCode = receipt.WarehouseCode;
-                    var sadsdfasd = receipt.Location.ToString();
 
                     if (!String.IsNullOrEmpty(BatchNum))
                     {
                         oDocument.Lines.BatchNumbers.BatchNumber = BatchNum;
                         oDocument.Lines.BatchNumbers.Quantity = Math.Abs(receipt.Quantity - receipt.QuantityReal);                       
                         oDocument.Lines.BatchNumbers.Add();
-
-                        if (receipt.Location != 0)
+                        
+                        if (receipt.Location != 0 && esSalida == false)
                         {
                             oDocument.Lines.BinAllocations.BaseLineNumber = 0;
                             oDocument.Lines.BinAllocations.BinAbsEntry = receipt.Location;
                             oDocument.Lines.BinAllocations.Quantity = Math.Abs(receipt.Quantity - receipt.QuantityReal); 
                             oDocument.Lines.BinAllocations.SerialAndBatchNumbersBaseLine = 0;
                         }
+                        
                             
                     }
-
-                   
 
 
                     if (!String.IsNullOrEmpty(WhsCode))
@@ -436,7 +440,8 @@ namespace AddOnRevalorizacion.Class
                         oMaterialRevaluationSNBLines = oMaterialRevaluation.Lines.SNBLines;
                         oMaterialRevaluationSNBLines.SetCurrentLine(cont);
                         oMaterialRevaluationSNBLines.SnbAbsEntry = oRS.Fields.Item("AbsEntry").Value;  //AbsEntry from OBTN Table
-                        oMaterialRevaluationSNBLines.NewCost = (re.TotalLine/re.QuantityReal)*re.TcBase;
+                        //oMaterialRevaluationSNBLines.NewCost = (re.TotalLine/re.QuantityReal)*re.TcBase;
+                        oMaterialRevaluationSNBLines.NewCost = ((re.Quantity * re.PriceLine) / re.QuantityReal) * re.TcBase;
                         oMaterialRevaluationSNBLines.Add();
                         cont++;
 
