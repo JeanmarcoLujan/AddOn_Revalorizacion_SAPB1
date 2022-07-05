@@ -175,7 +175,7 @@ namespace AddOnRevalorizacion.Class
                 string query = "SELECT IFNULL(B.\"U_SMF_RINV\",'0') AS \"Revalorizacion\", IFNULL(B.\"U_SMF_SINV\",'0') AS \"Salida\", IFNULL(B.\"U_SMF_EINV\",'0') AS \"Entrada\", B.\"LineNum\", B.\"ItemCode\", A.\"DocEntry\", A.\"DocCur\",A.\"DocRate\", CASE WHEN A.\"DocCur\"='USD' THEN B.\"TotalFrgn\" ELSE B.\"LineTotal\" END AS \"TotalLine\", ";
                 query = query + " A.\"DocDate\" AS \"DocDate\", A.\"TaxDate\" AS \"TaxDate\", ";
                 query = query + " B.\"Quantity\", IFNULL(B.\"U_SMF_CREAL\",0) AS \"QuantityReal\", (SELECT \"U_SMF_CCSA\" FROM \"@SMF_REVA\" WHERE \"Code\" = '001') AS \"AcctCodeS\", (SELECT \"U_SMF_CCEN\" FROM \"@SMF_REVA\" WHERE \"Code\" = '001') AS \"AcctCodeE\", B.\"WhsCode\", ";
-                query = query + " (SELECT MAX(\"BatchNum\") FROM OIBT WHERE \"BaseType\"='20' AND \"BaseEntry\"=A.\"DocEntry\" AND \"BaseLinNum\"= B.\"LineNum\" ) AS \"BatchNum\", ";
+                query = query + " (SELECT MAX(\"BatchNum\") FROM IBT1 WHERE \"BaseType\"='20' AND \"BaseEntry\"=A.\"DocEntry\" AND \"BaseLinNum\"= B.\"LineNum\" ) AS \"BatchNum\", "; //OIBT
                 query = query + " ( select MAX(T2.\"AbsEntry\") from OITW T0 inner join OITM T1 on T0.\"ItemCode\" = T1.\"ItemCode\" inner join OIBQ T3 on T0.\"ItemCode\" = T3.\"ItemCode\" and T0.\"WhsCode\" = T3.\"WhsCode\" ";
                 query = query + " inner join OBIN T2 on T2.\"AbsEntry\" = T3.\"BinAbs\" WHERE T0.\"ItemCode\" = B.\"ItemCode\" AND T0.\"WhsCode\" = B.\"WhsCode\" ) AS \"Location\", ";
                 query = query + " B.\"OcrCode\", B.\"OcrCode2\", B.\"OcrCode3\", B.\"OcrCode4\", B.\"OcrCode5\", IFNULL((SELECT MAX(\"DocRate\") FROM OPCH WHERE \"DocEntry\"=B.\"BaseEntry\"),1) AS \"tc_base\", B.\"Price\" AS \"PriceLine\" ";
@@ -280,7 +280,7 @@ namespace AddOnRevalorizacion.Class
             {
                 
 
-                if (receipt.Quantity != receipt.QuantityReal)
+                if (receipt.Quantity != receipt.QuantityReal && receipt.QuantityReal > 0 )
                 {
                     string account_final = "";
                     var sdsd = Math.Abs(receipt.Quantity - receipt.QuantityReal); 
@@ -373,6 +373,10 @@ namespace AddOnRevalorizacion.Class
 
                     }
 
+                }
+                else
+                {
+                    Conexion.Conexion_SBO.m_SBO_Appl.MessageBox("La cantidad real es igual a la cantidad registrada o la cantidad real es igual a cero, no procede la revalorización", 1, "", "", "");
                 }
 
             }
