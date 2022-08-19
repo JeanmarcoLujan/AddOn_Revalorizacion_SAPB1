@@ -10,15 +10,3 @@ C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\obj\x64\De
 C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\obj\x64\Debug\AddOnRevalorizacion.exe
 C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\obj\x64\Debug\AddOnRevalorizacion.pdb
 C:\Users\soporte\source\repos\AddOnRevalorizacion\AddOnRevalorizacion\obj\x64\Debug\AddOnRevalorizacion.csproj.AssemblyReference.cache
-C:\Users\soporte\Source\Repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\bin\x64\Debug\AddOnRevalorizacion.exe.config
-C:\Users\soporte\Source\Repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\bin\x64\Debug\AddOnRevalorizacion.exe
-C:\Users\soporte\Source\Repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\bin\x64\Debug\AddOnRevalorizacion.pdb
-C:\Users\soporte\Source\Repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x64\Debug\AddOnRevalorizacion.csproj.AssemblyReference.cache
-C:\Users\soporte\Source\Repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x64\Debug\Interop.SAPbobsCOM.dll
-C:\Users\soporte\Source\Repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x64\Debug\Interop.SAPbouiCOM.dll
-C:\Users\soporte\Source\Repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x64\Debug\AddOnRevalorizacion.csproj.ResolveComReference.cache
-C:\Users\soporte\Source\Repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x64\Debug\AddOnRevalorizacion.Properties.Resources.resources
-C:\Users\soporte\Source\Repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x64\Debug\AddOnRevalorizacion.csproj.GenerateResource.cache
-C:\Users\soporte\Source\Repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x64\Debug\AddOnRevalorizacion.csproj.CoreCompileInputs.cache
-C:\Users\soporte\Source\Repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x64\Debug\AddOnRevalorizacion.exe
-C:\Users\soporte\Source\Repos\JeanmarcoLujan\AddOn_Revalorizacion_SAPB1\AddOnRevalorizacion\obj\x64\Debug\AddOnRevalorizacion.pdb

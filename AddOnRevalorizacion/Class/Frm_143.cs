@@ -401,7 +401,7 @@ namespace AddOnRevalorizacion.Class
             {
                 oRS = (SAPbobsCOM.Recordset)Conexion.Conexion_SBO.m_oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
 
-                string query = " SELECT B.\"MdAbsEntry\" AS \"AbsEntry\", (SELECT \"U_SMF_IACC\" FROM \"@SMF_REVA\" WHERE \"Code\" = '001') AS \"AumentarCuenta\", (SELECT \"U_SMF_DACC\" FROM \"@SMF_REVA\" WHERE \"Code\" = '001') AS \"DisminuirCuenta\" ";
+                string query = " SELECT (SELECT MAX(\"EvalSystem\") FROM OITM WHERE \"ItemCode\" = A.\"ItemCode\") AS \"EvalSystem\", B.\"MdAbsEntry\" AS \"AbsEntry\", (SELECT \"U_SMF_IACC\" FROM \"@SMF_REVA\" WHERE \"Code\" = '001') AS \"AumentarCuenta\", (SELECT \"U_SMF_DACC\" FROM \"@SMF_REVA\" WHERE \"Code\" = '001') AS \"DisminuirCuenta\" ";
                 query = query + " FROM OITL A  INNER JOIN ITL1 B ON A.\"LogEntry\" = B.\"LogEntry\" ";
                 query = query + " WHERE A.\"DocEntry\" = '" + re.DocEntry.ToString() + "'  AND A.\"DocType\" = '20'  AND A.\"DocLine\"='" + re.LineNum.ToString() + "' ";
 
@@ -438,19 +438,27 @@ namespace AddOnRevalorizacion.Class
                    
 
                     oRS.MoveFirst();
+                    
                     int cont = 0;
-                    while (!oRS.EoF)
-                    {
-                        oMaterialRevaluationSNBLines = oMaterialRevaluation.Lines.SNBLines;
-                        oMaterialRevaluationSNBLines.SetCurrentLine(cont);
-                        oMaterialRevaluationSNBLines.SnbAbsEntry = oRS.Fields.Item("AbsEntry").Value;  //AbsEntry from OBTN Table
-                        //oMaterialRevaluationSNBLines.NewCost = (re.TotalLine/re.QuantityReal)*re.TcBase;
-                        oMaterialRevaluationSNBLines.NewCost = ((re.Quantity * re.PriceLine) / re.QuantityReal) * re.TcBase;
-                        oMaterialRevaluationSNBLines.Add();
-                        cont++;
 
-                        oRS.MoveNext();
+                    string dsfsdf = oRS.Fields.Item("EvalSystem").Value;
+                    if (dsfsdf.Equals("B"))
+                    {
+                        while (!oRS.EoF)
+                        {
+                            oMaterialRevaluationSNBLines = oMaterialRevaluation.Lines.SNBLines;
+                            oMaterialRevaluationSNBLines.SetCurrentLine(cont);
+                            oMaterialRevaluationSNBLines.SnbAbsEntry = oRS.Fields.Item("AbsEntry").Value;  //AbsEntry from OBTN Table
+                            oMaterialRevaluationSNBLines.NewCost = ((re.Quantity * re.PriceLine) / re.QuantityReal) * re.TcBase;
+                            oMaterialRevaluationSNBLines.Add();
+                            cont++;
+
+                            oRS.MoveNext();
+                        }
                     }
+
+                    
+                    
 
                     int RetVal = oMaterialRevaluation.Add();
                     if (RetVal != 0)
