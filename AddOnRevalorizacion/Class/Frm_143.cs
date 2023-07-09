@@ -178,8 +178,9 @@ namespace AddOnRevalorizacion.Class
                 query = query + " (SELECT MAX(\"BatchNum\") FROM IBT1 WHERE \"BaseType\"='20' AND \"BaseEntry\"=A.\"DocEntry\" AND \"BaseLinNum\"= B.\"LineNum\" ) AS \"BatchNum\", "; //OIBT
                 query = query + " ( select MAX(T2.\"AbsEntry\") from OITW T0 inner join OITM T1 on T0.\"ItemCode\" = T1.\"ItemCode\" inner join OIBQ T3 on T0.\"ItemCode\" = T3.\"ItemCode\" and T0.\"WhsCode\" = T3.\"WhsCode\" ";
                 query = query + " inner join OBIN T2 on T2.\"AbsEntry\" = T3.\"BinAbs\" WHERE T0.\"ItemCode\" = B.\"ItemCode\" AND T0.\"WhsCode\" = B.\"WhsCode\" ) AS \"Location\", ";
-                query = query + " B.\"OcrCode\", B.\"OcrCode2\", B.\"OcrCode3\", B.\"OcrCode4\", B.\"OcrCode5\", IFNULL((SELECT MAX(\"DocRate\") FROM OPCH WHERE \"DocEntry\"=B.\"BaseEntry\"),1) AS \"tc_base\", B.\"Price\" AS \"PriceLine\" ";
+                query = query + " B.\"OcrCode\", B.\"OcrCode2\", B.\"OcrCode3\", B.\"OcrCode4\", B.\"OcrCode5\", IFNULL((CASE WHEN B.\"BaseType\"='22' THEN (SELECT MAX(\"DocRate\") FROM OPOR WHERE \"DocEntry\"=B.\"BaseEntry\") ELSE (SELECT MAX(\"DocRate\") FROM OPCH WHERE \"DocEntry\"=B.\"BaseEntry\") END),1) AS \"tc_base\", B.\"Price\" AS \"PriceLine\" ";
                 query = query + " FROM OPDN A INNER JOIN PDN1 B ON A.\"DocEntry\"=B.\"DocEntry\"  WHERE A.\"DocNum\" = '" + oEditText.Value + "' AND A.\"CANCELED\"='N' ORDER BY 4 ";
+
 
                 oRS.DoQuery(query);
 
